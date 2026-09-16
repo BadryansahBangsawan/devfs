@@ -3,9 +3,10 @@ import SwiftUI
 struct RootView: View {
     @EnvironmentObject private var store: MountStore
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.openSettings) private var openSettings
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
+        VStack(alignment: .leading, spacing: FunTheme.sectionSpacing) {
             if let loadError = store.loadError {
                 Label(loadError, systemImage: "exclamationmark.triangle.fill")
                     .foregroundStyle(.red)
@@ -18,15 +19,15 @@ struct RootView: View {
             }
 
             if store.mounts.isEmpty {
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Add an SSH mount (key-based auth)")
-                    SettingsLink {
-                        Text("Add mount…")
-                    }
-                }
+                ExtraEmptyState(
+                    title: "No mounts",
+                    detail: "Add an SSH mount. Key-based auth only.",
+                    actionTitle: "Open Settings",
+                    action: { openSettings() }
+                )
             } else {
                 ScrollView {
-                    VStack(alignment: .leading, spacing: 12) {
+                    VStack(alignment: .leading, spacing: FunTheme.innerSpacing) {
                         ForEach(store.mounts) { mount in
                             MountRow(mount: mount)
                         }
@@ -34,12 +35,13 @@ struct RootView: View {
                 }
                 .frame(maxHeight: 320)
             }
+
+            ExtraSettingsFooter()
         }
-        .funPanel()
-        .background(.regularMaterial)
         .animation(reduceMotion ? nil : FunTheme.spring, value: store.mounts.count)
         .animation(reduceMotion ? nil : FunTheme.spring, value: store.banner)
         .animation(reduceMotion ? nil : FunTheme.spring, value: store.isSyncing)
+        .funPanel()
         .onAppear { store.load() }
     }
 }
@@ -99,7 +101,6 @@ struct MountRow: View {
             }
             .controlSize(.small)
         }
-        .padding(8)
-        .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 8))
+        .extraRowSurface()
     }
 }
