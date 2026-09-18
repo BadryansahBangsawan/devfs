@@ -63,6 +63,17 @@ Requires Xcode Command Line Tools and Swift 5.9+.
 
 ---
 
+## Troubleshooting
+
+**Sync fails immediately / "Permission denied (publickey)"**  
+DevFS uses your `~/.ssh/config`. Make sure the host alias resolves and your key is loaded: `ssh-add ~/.ssh/your_key`. Test the connection manually with `ssh <host>` before configuring a sync rule.
+
+**Icon appears but sync never starts**  
+macOS Full Disk Access is required when syncing directories under `~/Desktop`, `~/Documents`, or `~/Downloads`. Grant it at **System Settings → Privacy & Security → Full Disk Access** and restart DevFS.
+
+**rsync path not found**  
+If you installed rsync via Homebrew, the binary lives in `/opt/homebrew/bin/` which GUI apps may not see. Add it to `/etc/paths.d/homebrew` (one line: `/opt/homebrew/bin`) or symlink: `sudo ln -sf /opt/homebrew/bin/rsync /usr/local/bin/rsync`.
+
 ## Notes
 
 – Requires rsync and ssh on PATH (included on macOS by default).
