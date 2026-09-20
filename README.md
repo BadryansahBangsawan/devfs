@@ -79,7 +79,7 @@ If you installed rsync via Homebrew, the binary lives in `/opt/homebrew/bin/` wh
 – Requires rsync and ssh on PATH (included on macOS by default).
 – Uses your existing ~/.ssh config and keys.
 – Full Disk Access may be required to sync protected directories.
-– Before the first real sync to a new remote path, run a dry-run (`rsync -avn …` or your rule with dry-run enabled) so deletes and path mismatches are visible without writing files.
+– Before the first real sync to a new remote path, run a dry-run (`rsync -avn …` or your rule with dry-run enabled) so deletes and path mismatches are visible without writing files. Dry-run does not create a missing remote destination directory — `mkdir` that path on the host first if rsync reports the dest does not exist.
 – No Dock icon; lives entirely in the menu bar.
 
 ---
